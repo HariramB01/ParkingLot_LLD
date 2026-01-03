@@ -1,0 +1,146 @@
+@startuml
+
+class Main{
+}
+
+class ParkingLotBuilder{
+}
+
+class ParkingLot {
+  - floors: List<ParkingFloor>
+}
+
+class ParkingFloor {
+  - spots: List<ParkingSpot>
+}
+
+class ParkingSpot {
+  - spotNumber: int
+  - vehicle: Vehicle
+  - spotStatus: SpotStatus
+  - spotType: VehicleType
+}
+
+abstract class Vehicle {
+  - licensePlate: String
+  - vehicleType: VehicleType
+  - parkingFeeStrategy: ParkingFeeStrategy
+
+  + Vehicle(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy)
+  + getVehicleType(): VehicleType
+  + getLicensePlate(): String
+  + calculateFee(int duration, DurationType durationType): double
+}
+
+
+class Car {
+  + Car(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy)
+}
+
+class Bike {
+  + Bike(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy)
+}
+
+class Truck {
+  + Truck(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy)
+}
+
+class Van {
+  + Van(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy)
+}
+
+class VehicleFactory {
+  + {static} createVehicle(String licensePlate, VehicleType vehicleType, ParkingFeeStrategy parkingFeeStrategy): Vehicle
+}
+
+interface ParkingFeeStrategy {
+  + calculateFee(VehicleType vehicleType, int duration, DurationType durationType): double
+}
+
+class BasicHourlyRateStrategy {
+  + calculateFee(VehicleType vehicleType, int duration, DurationType durationType): double
+}
+
+class PremiumRateStrategy {
+  + calculateFee(VehicleType vehicleType, int duration, DurationType durationType): double
+}
+
+interface Payment {
+  + makePayment(double amount): boolean
+}
+
+class CashPayment {
+  + makePayment(double amount): boolean
+}
+
+class CreditCardPayment {
+  + makePayment(double amount): boolean
+}
+
+class DebitCardPayment {
+  + makePayment(double amount): boolean
+}
+
+
+enum DurationType {
+  HOUR
+  MINUTE
+}
+
+enum SpotStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum VehicleType {
+  BIKE
+  CAR
+  TRUCK
+  VAN
+}
+
+' Relationships
+
+/'Association'/
+Main --> ParkingLotBuilder
+ParkingLotBuilder --> ParkingLot
+VehicleFactory --> Vehicle
+VehicleFactory ..> ParkingFeeStrategy
+
+ParkingFeeStrategy ..> DurationType
+
+/'Composition'/
+ParkingLot "1" *-- "*" ParkingFloor
+ParkingFloor "1" *-- "*" ParkingSpot
+
+
+
+/'Dependency'/
+/'Vehicle class simply uses durationType in method param, it doesn't own or uses it.  That's why its Dependency'/
+Vehicle ..> DurationType
+/'Association'/
+/'Vehicle class uses uses VehicleTypes, it uses it.  Thats why its Association'/
+Vehicle --> VehicleType
+Vehicle --> ParkingFeeStrategy
+
+
+/'Association'/
+ParkingSpot "1" --> "1" Vehicle
+ParkingSpot --> SpotStatus
+ParkingSpot --> VehicleType
+
+Car --|> Vehicle
+Bike --|> Vehicle
+Truck --|> Vehicle
+Van --|> Vehicle
+
+BasicHourlyRateStrategy ..|> ParkingFeeStrategy
+PremiumRateStrategy ..|> ParkingFeeStrategy
+
+CashPayment ..|> Payment
+CreditCardPayment ..|> Payment
+DebitCardPayment ..|> Payment
+
+
+@enduml
