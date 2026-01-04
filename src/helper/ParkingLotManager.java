@@ -33,7 +33,11 @@ public class ParkingLotManager {
         double amount = vehicle.calculateFee(totalHours);
 
         boolean paymentStatus = new Payment(amount, new CreditCardPaymentStrategy()).processPayment(amount);
-        Ticket ticket = new Ticket(vehicle, spot, amount, paymentStatus);
+        if (!paymentStatus) {
+            spotManager.vacateSpot(spot);
+            return null;
+        }
+        Ticket ticket = new Ticket(vehicle, spot, amount);
         System.out.println("Ticket generated: " + ticket.getTicketNumber());
         return ticket;
     }

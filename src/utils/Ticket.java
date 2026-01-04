@@ -5,23 +5,21 @@ import java.util.UUID;
 
 public class Ticket {
 
-    private final UUID ticketNumber;
+    private final String ticketNumber;
     private final Vehicle vehicle;
     private final ParkingSpot parkingSpot;
     private final LocalDateTime entryTime;
     private final double amount;
-    private final boolean paymentStatus;
 
-    public Ticket(Vehicle vehicle, ParkingSpot parkingSpot, double amount, boolean paymentStatus) {
-        this.ticketNumber = UUID.randomUUID();
+    public Ticket(Vehicle vehicle, ParkingSpot parkingSpot, double amount) {
+        this.ticketNumber = UUID.randomUUID().toString();
         this.vehicle = vehicle;
         this.parkingSpot = parkingSpot;
         this.amount = amount;
         this.entryTime = LocalDateTime.now();
-        this.paymentStatus = paymentStatus;
     }
 
-    public UUID getTicketNumber() {
+    public String getTicketNumber() {
         return ticketNumber;
     }
 

@@ -21,8 +21,8 @@ public abstract class Vehicle {
         return licensePlate;
     }
 
-    public String getVehicleType() {
-        return vehicleType.getVehicleType();
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
     public String getVehicleOwnerName() {

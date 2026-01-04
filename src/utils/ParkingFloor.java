@@ -1,26 +1,44 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingFloor {
-    private int id;
-    private List<ParkingSpot> parkingSpots;
 
-    public ParkingSpot findParkingSpot(String vehicleType) {
+    private final int floorNumber;
+    private final List<ParkingSpot> parkingSpots = new ArrayList<>();
+
+    public ParkingFloor(int floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public void addParkingSpot(ParkingSpot spot) {
+        parkingSpots.add(spot);
+    }
+
+    public ParkingSpot findParkingSpot(VehicleType vehicleType) {
         for (ParkingSpot spot : parkingSpots) {
-            if (spot.getSpotStatus().equals(SpotStatus.AVAILABLE) && spot.getVehicleType().equals(vehicleType)) {
+            if (spot.getSpotStatus() == SpotStatus.AVAILABLE &&
+                    spot.getVehicleType().equals(vehicleType.getVehicleType())) {
                 return spot;
             }
         }
         return null;
     }
 
-    public ParkingSpot findParkingSpotBySpotNumberAndVehicleType(int spotNumber, Vehicle vehicle) {
+    public void displayAvailableSpots() {
+        System.out.print("Floor " + floorNumber + " -> ");
         for (ParkingSpot spot : parkingSpots) {
-            if (spot.getSpotStatus().equals(SpotStatus.OCCUPIED) && spot.getSpotNumber() == spotNumber && spot.getVehicle().equals(vehicle)) {
-                return spot;
+            if (spot.getSpotStatus() == SpotStatus.AVAILABLE) {
+                System.out.print(
+                        "[" + spot.getSpotNumber() + "-" + spot.getVehicleType() + "] "
+                );
             }
         }
-        return null;
+        System.out.println();
+    }
+
+    public int getFloorNumber() {
+        return floorNumber;
     }
 }

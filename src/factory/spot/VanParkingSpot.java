@@ -6,12 +6,12 @@ import utils.VehicleType;
 
 public class VanParkingSpot extends ParkingSpot {
 
-    public VanParkingSpot(int spotNumber, VehicleType vehicleType) {
-        super(spotNumber, vehicleType);
+    public VanParkingSpot(int spotNumber) {
+        super(spotNumber, VehicleType.VAN);
     }
 
     @Override
     public boolean canParkVehicle(Vehicle vehicle) {
-        return "van".equalsIgnoreCase(vehicle.getVehicleType());
+        return "van".equalsIgnoreCase(vehicle.getVehicleType().getVehicleType());
     }
 }
