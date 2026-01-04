@@ -12,6 +12,6 @@ public class CarParkingSpot extends ParkingSpot {
 
     @Override
     public boolean canParkVehicle(Vehicle vehicle) {
-        return false;
+        return "car".equalsIgnoreCase(vehicle.getVehicleType());
     }
 }

@@ -4,6 +4,6 @@ import utils.ParkingLot;
 
 public class ParkingLotBuilder {
 
-    ParkingLot parkingLot = new ParkingLot();
+//    ParkingLot parkingLot = new ParkingLot();
 
 }

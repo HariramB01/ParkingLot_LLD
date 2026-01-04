@@ -17,5 +17,24 @@ public abstract class Vehicle {
         this.parkingFeeStrategy = parkingFeeStrategy;
     }
 
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public String getVehicleType() {
+        return vehicleType.getVehicleType();
+    }
+
+    public String getVehicleOwnerName() {
+        return vehicleOwnerName;
+    }
+
+    public ParkingFeeStrategy getParkingFeeStrategy() {
+        return parkingFeeStrategy;
+    }
+
+    public double calculateFee(int duration, DurationType durationType) {
+        return parkingFeeStrategy.calculateFee(this.vehicleType, duration, durationType);
+    }
 
 }
