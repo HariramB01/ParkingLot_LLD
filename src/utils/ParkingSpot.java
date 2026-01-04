@@ -14,7 +14,7 @@ public abstract class ParkingSpot {
 
     public abstract boolean canParkVehicle(Vehicle vehicle);
 
-    public SpotStatus isOccupied() {
+    public SpotStatus getSpotStatus() {
         return spotStatus;
     }
 
@@ -30,29 +30,19 @@ public abstract class ParkingSpot {
         return spotNumber;
     }
 
-    public boolean parkVehicle(Vehicle vehicle) {
-        if (!spotStatus.getSpotStatus().equalsIgnoreCase("available")) {
-            return false;
-        } else {
-            if (!canParkVehicle(vehicle)) {
-                System.out.println("Vehicle cannot be parked at this spot");
-                return false;
-            }
-            this.spotStatus = SpotStatus.OCCUPIED;
-            this.vehicle = vehicle;
-            System.out.println("Vehicle parked successfully at spot: " + spotNumber);
-            return true;
-        }
+    public void setSpotNumber(int spotNumber) {
+        this.spotNumber = spotNumber;
     }
 
-    public boolean vacateSpot() {
-        if (isOccupied().equals("occupied")) {
-            System.out.println("Vehicle parked successfully at spot: " + spotNumber);
-            this.vehicle = null;
-            this.spotStatus = SpotStatus.AVAILABLE;
-            return true;
-        }
-        System.out.println("Vehicle cannot be parked at this spot");
-        return false;
+    public void setSpotStatus(SpotStatus spotStatus) {
+        this.spotStatus = spotStatus;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 }

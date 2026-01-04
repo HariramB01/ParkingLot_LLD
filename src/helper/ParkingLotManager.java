@@ -1,29 +1,49 @@
 package helper;
 
-import utils.ParkingLot;
-
-import java.util.List;
+import strategy.payment.CreditCardPaymentStrategy;
+import utils.*;
 
 public class ParkingLotManager {
 
-    private static volatile ParkingLotManager parkingLotManagerInstance;
-    private List<ParkingLot> parkingLots;
+    private final ParkingSpotManager spotManager = new ParkingSpotManager();
 
-    private ParkingLotManager(){
-    }
-
-    public static ParkingLotManager getInstance(){
-        if(parkingLotManagerInstance==null){
-            synchronized (ParkingLotManager.class){
-                if(parkingLotManagerInstance==null){
-                    parkingLotManagerInstance = new ParkingLotManager();
-                }
+    public ParkingSpot findAvailableSpot(ParkingLot lot, Vehicle vehicle) {
+        for (ParkingFloor floor : lot.getFloors()) {
+            ParkingSpot spot = floor.findParkingSpot(vehicle.getVehicleType());
+            if (spot != null) {
+                return spot;
             }
         }
-        return parkingLotManagerInstance;
+        return null;
     }
 
-    public void createParkingLot() {
-        System.out.print("");
+    public Ticket parkVehicle(ParkingLot lot, Vehicle vehicle, int totalHours) {
+
+        ParkingSpot spot = findAvailableSpot(lot, vehicle);
+
+        if (spot == null) {
+            System.out.println("No parking spots available for " + vehicle.getVehicleType());
+            return null;
+        }
+
+        boolean parked = spotManager.parkVehicle(spot, vehicle);
+        if (!parked) {
+            return null;
+        }
+        double amount = vehicle.calculateFee(totalHours);
+
+        boolean paymentStatus = new Payment(amount, new CreditCardPaymentStrategy()).processPayment(amount);
+        Ticket ticket = new Ticket(vehicle, spot, amount, paymentStatus);
+        System.out.println("Ticket generated: " + ticket.getTicketNumber());
+        return ticket;
+    }
+
+    public String vacateSpot(Ticket ticket) {
+
+        ParkingSpot parkingSpot = ticket.getParkingSpot();
+        if (parkingSpot != null) {
+            return spotManager.vacateSpot(parkingSpot) ? "vacated successfully" : "Spot already available";
+        }
+        return "Invalid spot / vehicle mismatch";
     }
 }

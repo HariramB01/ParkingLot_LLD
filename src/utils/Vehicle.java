@@ -33,8 +33,8 @@ public abstract class Vehicle {
         return parkingFeeStrategy;
     }
 
-    public double calculateFee(int duration, DurationType durationType) {
-        return parkingFeeStrategy.calculateFee(this.vehicleType, duration, durationType);
+    public double calculateFee(int duration) {
+        return parkingFeeStrategy.calculateFee(this.vehicleType, duration);
     }
 
 }

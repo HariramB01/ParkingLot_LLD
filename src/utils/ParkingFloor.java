@@ -3,11 +3,12 @@ package utils;
 import java.util.List;
 
 public class ParkingFloor {
+    private int id;
     private List<ParkingSpot> parkingSpots;
 
     public ParkingSpot findParkingSpot(String vehicleType) {
         for (ParkingSpot spot : parkingSpots) {
-            if (spot.isOccupied().equals(SpotStatus.AVAILABLE) && spot.getVehicleType().equals(vehicleType)) {
+            if (spot.getSpotStatus().equals(SpotStatus.AVAILABLE) && spot.getVehicleType().equals(vehicleType)) {
                 return spot;
             }
         }
@@ -16,7 +17,7 @@ public class ParkingFloor {
 
     public ParkingSpot findParkingSpotBySpotNumberAndVehicleType(int spotNumber, Vehicle vehicle) {
         for (ParkingSpot spot : parkingSpots) {
-            if (spot.isOccupied().equals(SpotStatus.OCCUPIED) && spot.getSpotNumber() == spotNumber && spot.getVehicle().equals(vehicle)) {
+            if (spot.getSpotStatus().equals(SpotStatus.OCCUPIED) && spot.getSpotNumber() == spotNumber && spot.getVehicle().equals(vehicle)) {
                 return spot;
             }
         }

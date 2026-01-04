@@ -1,32 +1,38 @@
 package strategy.fee;
 
 import strategy.ParkingFeeStrategy;
-import utils.DurationType;
 import utils.VehicleType;
 
 public class BasicFeePaymentStrategy implements ParkingFeeStrategy {
     @Override
-    public double calculateFee(VehicleType vehicleType, int duration, DurationType durationType) {
-        switch (vehicleType.getVehicleType().toLowerCase()) {
-            case "car":
-                return durationType == DurationType.HOURS
-                        ? duration * 10.0   // $10 per hour for cars
-                        : duration * 10.0 * 24;  // Daily rate
+    public double calculateFee(VehicleType vehicleType, int totalHours) {
 
-            case "bike":
-                return durationType == DurationType.HOURS
-                        ? duration * 5.0    // $5 per hour for bikes
-                        : duration * 5.0 * 24;  // Daily rate
+        int days = totalHours / 24;
+        int remainingHours = totalHours % 24;
 
-            case "auto":
-                return durationType == DurationType.HOURS
-                        ? duration * 8.0    // $8 per hour for autos
-                        : duration * 8.0 * 24;  // Daily rate
+        double hourlyRate;
+        double dailyRate;
+
+        switch (vehicleType) {
+            case CAR, TRUCK:
+                hourlyRate = 15.0;
+                dailyRate = hourlyRate * 24;
+                break;
+
+            case BIKE:
+                hourlyRate = 8.0;
+                dailyRate = hourlyRate * 24;
+                break;
+
+            case VAN:
+                hourlyRate = 12.0;
+                dailyRate = hourlyRate * 24;
+                break;
 
             default:
-                return durationType == DurationType.HOURS
-                        ? duration * 15.0   // $15 per hour for other vehicles
-                        : duration * 15.0 * 24;  // Daily rate
+                hourlyRate = 20.0;
+                dailyRate = hourlyRate * 24;
         }
+        return (days * dailyRate) + (remainingHours * hourlyRate);
     }
 }
